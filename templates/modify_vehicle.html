@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Modify Vehicle</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container mt-4">
+        <h2>Modify Vehicle (VIN: {{ vehicle.vin }})</h2>
+        <form method="POST">
+            <div class="mb-3">
+                <label class="form-label">Color</label>
+                <input type="text" name="color" class="form-control" value="{{ vehicle.color }}" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Engine</label>
+                <input type="text" name="engine" class="form-control" value="{{ vehicle.engine }}" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Transmission</label>
+                <input type="text" name="transmission" class="form-control" value="{{ vehicle.transmission }}" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Status</label>
+                <select name="status" class="form-select" required>
+                    <option value="Available" {% if vehicle.status == 'Available' %}selected{% endif %}>Available</option>
+                    <option value="Sold" {% if vehicle.status == 'Sold' %}selected{% endif %}>Sold</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Save Changes</button>
+            <a href="{{ url_for('view_all_vehicles') }}" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

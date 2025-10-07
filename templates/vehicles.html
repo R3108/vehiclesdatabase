@@ -42,7 +42,7 @@
                     <th>Engine</th>
                     <th>Transmission</th>
                     <th>Status</th>
-                    <th>Actions</th> <!-- New column for actions -->
+                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -55,6 +55,10 @@
                         <td>{{ vehicle.transmission }}</td>
                         <td>{{ vehicle.status }}</td>
                         <td>
+                            <a href="{{ url_for('modify_vehicle', vin=vehicle.vin) }}" 
+                               class="btn btn-primary btn-sm">
+                                Modify
+                            </a>
                             <a href="{{ url_for('delete_vehicle', vin=vehicle.vin) }}" 
                                class="btn btn-danger btn-sm"
                                onclick="return confirm('Are you sure you want to delete this vehicle?');">

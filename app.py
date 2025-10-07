@@ -262,6 +262,25 @@ def delete_vehicle(vin):
 
     return render_template('delete.html', vehicle=vehicle, sale=sale, form=form)
 
+# ...existing code...
+
+@app.route('/modify_vehicle/<vin>', methods=['GET', 'POST'])
+@login_required
+def modify_vehicle(vin):
+    vehicle = Vehicle.query.filter_by(vin=vin).first_or_404()
+    if request.method == 'POST':
+        # Update vehicle fields from form data here
+        vehicle.color = request.form['color']
+        vehicle.engine = request.form['engine']
+        vehicle.transmission = request.form['transmission']
+        vehicle.status = request.form['status']
+        db.session.commit()
+        flash('Vehicle updated successfully!', 'success')
+        return redirect(url_for('view_all_vehicles'))
+    return render_template('modify_vehicle.html', vehicle=vehicle)
+
+# ...existing code...
+
 @app.errorhandler(404)
 def not_found(error):
     return render_template('404.html'), 404
