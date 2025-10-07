@@ -45,6 +45,10 @@
         .pie-section h4 {
             margin-bottom: 24px;
         }
+        .chart-wrapper {
+            max-width: 350px;
+            margin: 0 auto;
+        }
     </style>
 </head>
 <body>
@@ -117,14 +121,14 @@
         </div>
 
         <!-- Pie Chart Section -->
-        <div class="pie-section">
-            <h4 class="text-center">Vehicle Status Distribution</h4>
-            <canvas id="statusPieChart"
-                    width="400"
-                    height="400"
-                    data-available="{{ available_vehicles if available_vehicles is not none else 0 }}"
-                    data-sold="{{ sold_vehicles if sold_vehicles is not none else 0 }}">
-            </canvas>
+        <div class="pie-section text-center">
+            <h4 class="text-center mb-4">Vehicle Status Distribution</h4>
+            <div class="chart-wrapper">
+                <canvas id="statusPieChart"
+                        data-available="{{ available_vehicles if available_vehicles is not none else 0 }}"
+                        data-sold="{{ sold_vehicles if sold_vehicles is not none else 0 }}">
+                </canvas>
+            </div>
         </div>
 
         <a href="{{ url_for('index') }}" class="btn btn-secondary">Back to Home</a>
