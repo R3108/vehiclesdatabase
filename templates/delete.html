@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Delete Vehicle/Sale</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{{ url_for('index') }}">Vehicle Sales</a>
+            <div class="navbar-nav">
+                <a class="nav-link" href="{{ url_for('view_all_vehicles') }}">Vehicles</a>
+                <a class="nav-link" href="{{ url_for('add_sale') }}">Add Vehicle/Sale</a>
+                <a class="nav-link" href="{{ url_for('top_brands') }}">Top Brands</a>
+                <a class="nav-link" href="{{ url_for('logout') }}">Logout ({{ current_user.username }})</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <h1>Confirm Delete</h1>
+        <p>Are you sure you want to delete the following vehicle and its sale details?</p>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <div class="card mb-4">
+            <div class="card-header">
+                Vehicle Details
+            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item"><strong>VIN:</strong> {{ vehicle.vin }}</li>
+                <li class="list-group-item"><strong>Model:</strong> {{ vehicle.model.name }}</li>
+                <li class="list-group-item"><strong>Color:</strong> {{ vehicle.color }}</li>
+                <li class="list-group-item"><strong>Engine:</strong> {{ vehicle.engine }}</li>
+                <li class="list-group-item"><strong>Transmission:</strong> {{ vehicle.transmission }}</li>
+                <li class="list-group-item"><strong>Status:</strong> {{ vehicle.status }}</li>
+            </ul>
+        </div>
+
+        {% if vehicle.status == 'Sold' and sale %}
+        <div class="card mb-4">
+            <div class="card-header">
+                Sale Details
+            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item"><strong>Customer ID:</strong> {{ sale.cust_id }}</li>
+                <li class="list-group-item"><strong>Dealer ID:</strong> {{ sale.dealer_id }}</li>
+                <li class="list-group-item"><strong>Sale Price:</strong> ${{ sale.sale_price }}</li>
+                <li class="list-group-item"><strong>Sale Date:</strong> {{ sale.sale_date.strftime('%Y-%m-%d') }}</li>
+            </ul>
+        </div>
+        {% endif %}
+
+        <form method="post" class="d-inline">
+            {{ form.hidden_tag() }}
+            <button type="submit" class="btn btn-danger">Yes, Delete</button>
+            <a href="{{ url_for('view_all_vehicles') }}" class="btn btn-secondary ms-2">Cancel</a>
+        </form>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
