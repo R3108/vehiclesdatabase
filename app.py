@@ -262,8 +262,6 @@ def delete_vehicle(vin):
 
     return render_template('delete.html', vehicle=vehicle, sale=sale, form=form)
 
-# ...existing code...
-
 @app.route('/modify_vehicle/<vin>', methods=['GET', 'POST'])
 @login_required
 def modify_vehicle(vin):
@@ -281,6 +279,40 @@ def modify_vehicle(vin):
 
 # ...existing code...
 
+@app.route('/dashboard')
+@login_required
+def dashboard():
+    # Vehicle statistics
+    total_vehicles = Vehicle.query.count()
+    available_vehicles = Vehicle.query.filter_by(status='Available').count()
+    sold_vehicles = Vehicle.query.filter_by(status='Sold').count()
+
+    # Top brands by vehicle count
+    top_brands = (
+        db.session.query(Brand.brand_name, db.func.count(Vehicle.vin).label('vehicle_count'))
+        .join(Model, Brand.brand_id == Model.brand_id)
+        .join(Vehicle, Model.model_id == Vehicle.model_id)
+        .group_by(Brand.brand_name)
+        .order_by(db.desc('vehicle_count'))
+        .limit(5)
+        .all()
+    )
+
+    # Sales statistics
+    total_sales = Sale.query.count()
+    total_revenue = db.session.query(db.func.sum(Sale.sale_price)).scalar() or 0
+
+    return render_template(
+        'dashboard.html',
+        total_vehicles=total_vehicles,
+        available_vehicles=available_vehicles,
+        sold_vehicles=sold_vehicles,
+        top_brands=top_brands,
+        total_sales=total_sales,
+        total_revenue=total_revenue
+    )
+
+# ...existing code...
 @app.errorhandler(404)
 def not_found(error):
     return render_template('404.html'), 404
